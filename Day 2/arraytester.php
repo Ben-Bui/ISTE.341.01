@@ -15,14 +15,26 @@ echo "<h1>#1 - Standard indexed array</h1>";
 // $array1[6] = 'dog';
 
 // var_dump($array1);
-for (i=0; $i<count($array1); $i++){
+for ($i=0; $i<count($array1); $i++){
 	echo "$arry1[$i]<br />";
 }
 
 echo "<h1>#2 - Associative array value</h1>";
 
-echo "<h1>#3- Associative array value and key</h1>";
+$array2 = [
+	"RIT" => "https://ww.rit.edu",
+	'Google' => "https://google.com"
+];
 
+$array2["Yahoo"] = 'https://yahoo.com';
+foreach($array2 as  $val){
+	echo "$val <br />";
+}
+
+echo "<h1>#3- Associative array value and key</h1>";
+foreach($array2 as $key=>$val) {
+	echo "$key = $val <br/>";
+}
 echo "<h1>#4 - Associative array build some links</h1>";
 
 echo "<h1>#5 - Nested Asoociative Array - one at a time</h1>";
