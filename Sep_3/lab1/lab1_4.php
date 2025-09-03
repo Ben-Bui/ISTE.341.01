@@ -44,7 +44,7 @@ for($i=0; $i<count($array); $i++){
 
 echo "<h2>4f and 4g</h2>";
 $array2 = [
-    "name" => ["first"=>"Bryan", "last"=>"French"],
+    "name" => ["first"=>"Gia", "last"=>"Bui"],
     "address" => [
         "street"=>"123 Main St",
         "city"=>"Rochester",
