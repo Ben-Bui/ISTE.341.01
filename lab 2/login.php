@@ -1,60 +1,41 @@
 <?php
-session_name("Lab2Session");
+session_name("BuiLab2");//session name create
 session_start();
 
-// set default timezone for cookie date
-date_default_timezone_set("America/New_York");
+date_default_timezone_set("America/New_York");//default timezone
 
-// Hardcoded username and password
-$validUser = "admin";
-$validPass = "password";
+$validUser = "admin";   // hardcorde user
+$validPass = "password"; // hardcode password
 
-// Check if user is already logged in
-if (!empty($_SESSION['loggedIn']) && $_SESSION['loggedIn'] === true) {
-    header("Location: admin.php");
+if (!empty($_SESSION['loggedIn']) && $_SESSION['loggedIn'] === true) {//Check if login
+    header("Location: admin.php");//redirect to admin
     exit;
 }
 
-// Check if username and password are provided
-if (isset($_GET['user']) && isset($_GET['password'])) {
+$redirected = isset($_GET['redirected']) ? true : false;//check if redirect
+
+if (isset($_GET['user']) && isset($_GET['password'])) {//check if user and pass in url
     $user = $_GET['user'];
     $pass = $_GET['password'];
 
-    if ($user === $validUser && $pass === $validPass) {
-        // Correct login
+    if ($user === $validUser && $pass === $validPass) {//if pass login success
+        // correct login
         $_SESSION['loggedIn'] = true;
 
-        // Set a cookie with current date/time for 10 minutes
-        $loginTime = date("F j, Y g:i a");
-        setcookie("loggedIn", $loginTime, time() + 600); // 600 sec = 10 min
+        $expire = time() + 600; // expire in 10 min
+        $path = "/~btb4516/";
+        $domain = "solace.ist.rit.edu";
+        $secure = false;
 
-        header("Location: admin.php");
+        $loginTime = date("F j, Y g:i a"); // date and time
+        setcookie("loggedIn", $loginTime, $expire, $path, $domain, $secure);//set cookie name with loggedIn
+
+        header("Location: admin.php");//redirect to admin
         exit;
     } else {
-        // Incorrect login
-        $message = "Invalid Login";
+        echo "<h2>Invalid Login</h2>";//if not sucess
     }
 } else {
-    $message = "Invalid Login";
-}
-
-// Check if redirected from admin.php without login
-if (isset($_GET['message']) && $_GET['message'] === "nologin") {
-    $message = "You need to log in";
+    echo "<h2>Invalid Login</h2>";//no user or pass or redirect
 }
 ?>
-<html>
-    <head>
-        <title>Login</title>
-    </head>
-    <body>
-        <h1>Login Page</h1>
-        <?php
-        if (!empty($message)) {
-            echo "<p>$message</p>";
-        }
-        ?>
-        <p>Provide username and password via URL like: <br>
-        <code>?user=admin&password=password</code></p>
-    </body>
-</html>
