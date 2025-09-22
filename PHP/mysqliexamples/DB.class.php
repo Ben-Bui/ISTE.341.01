@@ -71,7 +71,7 @@ class DB {
 
     function insert($last,$first,$nick) {
         
-        $query = "INSERT INTO people (Lastname, Firstname, Nickname) VALUES (?,?,?)";
+        $query = "INSERT INTO people (LastName, FirstName, NickName) VALUES (?,?,?)";
         $insertID = -1;
 
         if ($stmt = $this->conn->prepare($query)) {
