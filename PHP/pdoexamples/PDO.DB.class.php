@@ -105,9 +105,10 @@ class DB {
         try {
 
             $stmt = $this->dbh->prepare("SELECT * FROM people ");
-            $stmt->execute(["id"=>$id]);
+            $stmt->execute();
+            $stmt->setFetchMode(PDO::FETCH_CLASS,"Person");
             while ($person = $stmt->fetch()){
-                $data[] = $row;
+                $data[] = $person;
             }
 
         } catch(PDOException $pe){
