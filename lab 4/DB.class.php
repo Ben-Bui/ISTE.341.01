@@ -60,7 +60,7 @@ class DB {
         }
 
             $bigString .= "</table>\n";
-       
+            $bigString .= "<p># Records found: " . count($data) . "</p>";
         } else {
             $bigString = "<h2>No people exist.</h2>\n";
         }
@@ -146,4 +146,19 @@ class DB {
             return $numRows;
 
     }//delete
+
+    // NEW METHOD ADDED FOR LAB 4
+    public function getPhonesByPerson($id) {
+        $stmt = $this->conn->prepare("SELECT PersonID, PhoneType, AreaCode, PhoneNum FROM phonenumbers WHERE PersonID = ?");
+        $stmt->bind_param("i", $id);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $phones = [];
+        while ($row = $result->fetch_assoc()) {
+            $phones[] = $row;
+        }
+        $stmt->close();
+        return $phones;
+    }
+
 }//DB
