@@ -118,4 +118,65 @@ class DB {
         return $data;
     }//getAllObject
 
+    // NEW METHODS ADDED FOR LAB 4
+    function getAllPeople() {
+        $data = [];
+        try {
+            $stmt = $this->dbh->prepare("SELECT * FROM people");
+            $stmt->execute();
+            $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        } catch(PDOException $pe) {
+            echo $pe->getMessage();
+        }
+        return $data;
+    }
+
+    function getAllPeopleAsTable() {
+        $data = $this->getAllPeople();
+
+        if (count($data) > 0) {
+            $bigString = "<table border='1'>\n
+            <tr><th>ID</th>
+                <th>First</th>
+                <th>Last</th>
+                <th>Nick</th></tr>\n";
+
+            foreach ($data as $row) {
+                $bigString .= "<tr>
+                                <td><a href='Lab4_4.php?id={$row['PersonID']}'>{$row['PersonID']}</a></td>
+                                <td>{$row['FirstName']}</td>
+                                <td>{$row['LastName']}</td>
+                                <td>{$row['NickName']}</td>
+                            </tr>\n";
+            }
+            $bigString .= "</table>\n";
+            $bigString .= "<p># Records found: " . count($data) . "</p>";
+        } else {
+            $bigString = "<h2>No people exist.</h2>\n";
+        }
+        return $bigString;
+    }
+
+    public function getPhonesByPersonAssoc($id) {
+        try {
+            $stmt = $this->dbh->prepare("SELECT PersonID, PhoneType, AreaCode, PhoneNum FROM phonenumbers WHERE PersonID = ?");
+            $stmt->execute([$id]);
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        } catch(PDOException $pe) {
+            echo $pe->getMessage();
+            return [];
+        }
+    }
+
+    public function getPhonesByPersonClass($id) {
+        try {
+            $stmt = $this->dbh->prepare("SELECT PersonID, PhoneType, AreaCode, PhoneNum FROM phonenumbers WHERE PersonID = ?");
+            $stmt->execute([$id]);
+            return $stmt->fetchAll(PDO::FETCH_CLASS, "PhoneNumber");
+        } catch(PDOException $pe) {
+            echo $pe->getMessage();
+            return [];
+        }
+    }
+
 }//DB
