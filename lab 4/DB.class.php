@@ -60,7 +60,7 @@ class DB {
         }
 
             $bigString .= "</table>\n";
-            $bigString .= "<p># Records found: " . count($data) . "</p>";
+            $bigString .= "<p># Records found: " . count($data) . "</p>";//add recrod count display
         } else {
             $bigString = "<h2>No people exist.</h2>\n";
         }
@@ -85,80 +85,90 @@ class DB {
     
     }//insert
 
-        function update($fields) {
-            $query = "UPDATE people SET ";
-            $items = [];
-            $types = "";
-            $updateID = 0;
+    function update($fields) {
+        $query = "UPDATE people SET ";
+        $items = [];
+        $types = "";
+        $updateID = 0;
 
-            foreach ($fields as $k => $v) {
-                switch($k){
-                    case "nick":
-                        $query .= "NickName = ?, ";
-                        $items[] = $v;
-                        $types .= "s";
-                        break;
-                    case "first":
-                        $query .= "FirstName = ?, ";
-                        $items[] = $v;
-                        $types .= "s";
-                        break;
-                    case "last":
-                        $query .= "LastName = ?, ";
-                        $items[] = $v;
-                        $types .= "s";
-                        break;
-                    case "id":
-                        $updateID = intval($v);
-                        break;
-                    default:
-                        // ignore unknown fields
-                        break;
-                }
+        foreach ($fields as $k => $v) {
+            switch($k){
+                case "nick":
+                    $query .= "NickName = ?, ";
+                    $items[] = $v;
+                    $types .= "s";
+                    break;
+                case "first":
+                    $query .= "FirstName = ?, ";
+                    $items[] = $v;
+                    $types .= "s";
+                    break;
+                case "last":
+                    $query .= "LastName = ?, ";
+                    $items[] = $v;
+                    $types .= "s";
+                    break;
+                case "id":
+                    $updateID = intval($v);
+                    break;
+                default:
+                    // ignore unknown fields
+                    break;
             }
-
-            $query = rtrim($query, ", "); // remove trailing comma
-            $query .= " WHERE PersonID = ?";
-            $types .= "i";
-            $items[] = $updateID;
-
-            $numRows = 0;
-            if ($stmt = $this->conn->prepare($query)) {
-                $stmt->bind_param($types, ...$items);
-                $stmt->execute();
-                $numRows = $stmt->affected_rows;
-            }
-
-            return $numRows;
-
-        }//update
-
-        function delete($id) {
-            $query = "DELETE FROM people WHERE PersonID = ? ";
-            $numRows = 0;
-            if ($stmt = $this->conn->prepare($query)){
-                $stmt->bind_param("i", $id);
-                $stmt->execute();
-                $stmt->store_result();
-                $numRows = $stmt->affected_rows;
         }
 
-            return $numRows;
+        $query = rtrim($query, ", "); // remove trailing comma
+        $query .= " WHERE PersonID = ?";
+        $types .= "i";
+        $items[] = $updateID;
+
+        $numRows = 0;
+        if ($stmt = $this->conn->prepare($query)) {
+            $stmt->bind_param($types, ...$items);
+            $stmt->execute();
+            $numRows = $stmt->affected_rows;
+        }
+
+        return $numRows;
+
+    }//update
+
+    function delete($id) {
+        $query = "DELETE FROM people WHERE PersonID = ? ";
+        $numRows = 0;
+        if ($stmt = $this->conn->prepare($query)){
+            $stmt->bind_param("i", $id);
+            $stmt->execute();
+            $stmt->store_result();
+            $numRows = $stmt->affected_rows;
+        }
+
+        return $numRows;
 
     }//delete
 
-    // NEW METHOD ADDED FOR LAB 4
-    public function getPhonesByPerson($id) {
-        $stmt = $this->conn->prepare("SELECT PersonID, PhoneType, AreaCode, PhoneNum FROM phonenumbers WHERE PersonID = ?");
-        $stmt->bind_param("i", $id);
-        $stmt->execute();
-        $result = $stmt->get_result();
-        $phones = [];
-        while ($row = $result->fetch_assoc()) {
-            $phones[] = $row;
+    public function getPhonesByPerson($id) {//add new method getphone for lab 4
+        $data = [];
+
+        if ($stmt = $this->conn->prepare("SELECT PersonID, PhoneType, AreaCode, PhoneNum FROM phonenumbers WHERE PersonID = ?")){
+            $stmt->bind_param("i", $id);//bind id para as integer
+            $stmt->execute();
+            $stmt->store_result();
+            $stmt->bind_result($personID,$phoneType,$areaCode,$phoneNum);
+
+            if($stmt->num_rows > 0) {
+                while ($stmt->fetch()) {
+                    $data[] = [
+                        'PersonID' => $personID,
+                        'PhoneType' => $phoneType,
+                        'AreaCode' => $areaCode,
+                        'PhoneNum' => $phoneNum
+                    ];
+                }
+            }
         }
-        $stmt->close();
-        return $phones;
+
+        return $data;
     }
 
 }//DB
