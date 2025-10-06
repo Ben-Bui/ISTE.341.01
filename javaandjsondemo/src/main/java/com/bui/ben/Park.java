@@ -9,5 +9,5 @@ public class Park {
         parkName = name;
         parkDescription = desc;
         parkLocation = location;
-    }
+    } 
 }
