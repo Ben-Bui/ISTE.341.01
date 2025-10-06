@@ -2,6 +2,8 @@
 
 namespace DB\Tools;
 
+use DateTime;
+
 const MYCONST1 = "DB\Tools\MYCONST1";
 
 class Foo {
@@ -10,6 +12,8 @@ class Foo {
 
     public function saySomething() {
         echo "Hi Foo!<br />";
+        $dt = new DateTime();
+        echo $dt->getTimestamp()."<br />";
     }
 
 }//Foo

@@ -4,6 +4,12 @@ require 'Foo.php';
 
 // use DB\Tools\Foo as SomeFooClass;
 
+spl_autoload_register(function($class){
+    var_dump($class);
+    $class = substr($class,strrpos($class,'\\')+1).".php";
+    require_once($class);
+});
+
 // $foo = new Foo();
 $foo = new DB\Tools\Foo();
 // $foo = new SomeFooClass();
