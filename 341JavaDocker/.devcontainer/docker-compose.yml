@@ -1,0 +1,26 @@
+version: "3.9"
+services:
+  java:
+    build: ./java/.
+    # volumes:
+    #   # Mount the root folder that contains .git
+    #   - .:/workspaces:cached
+    #   - ~:/external-folder:cached
+    command: sleep infinity
+    # links:
+    #   - wildfly
+    # ...
+
+  wildfly:
+    build:
+      context: ./wildfly/.
+      args:
+        - jdk=21
+    ports:
+      - 8080:8080
+      - 9990:9990
+    # volumes:
+    # Mount the root folder that contains .git
+    # - .:/workspace:cached
+    # command: sleep infinity
+    # ...
