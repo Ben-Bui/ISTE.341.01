@@ -97,4 +97,67 @@ public class MyResource {
             return Response.status(Response.Status.CREATED)
                 .location(lnk.getUri()).build();
     }
+
+    @Path("Circle/{id}")
+    @PUT
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response updateCircle(
+        @PathParam("id") int id,
+        String circleIn
+    ) {
+        //body/data comes in as a JSON string
+        //do pasing and validation and update the datastore
+        JsonReader rdr = Json.createReader(new StringReader(circleIn));
+
+        try(rdr){
+            JsonObject obj = rdr.readObject();
+            var wrapper = new Object() {String retvalue = "\n";};
+
+            obj.keySet().forEach(key ->{
+                Object value = obj.get(key);
+                wrapper.retvalue += " Key: "+key+"\tValye: "
+                    + value + "\n";
+            });
+
+            //assume it exist in the db 
+            boolean exist = true;
+
+            if (!exist) {
+                return Response.status(Response.Status.NOT_FOUND).build();
+            }
+
+            if (obj.getJsonNumber("radius").doubleValue()<=0){
+                return Response.status(Response.Status.NOT_FOUND).build();           
+            }
+            //update the db
+            //makre sure we're return a valid JSON string
+            return Response.ok("Circle Update: "+wrapper.retvalue).build();
+        
+        }//try
+    
+    }//Update Circle
+
+
+
+    @Path("Circle/{id}")
+    @DELETE
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response deleteCircle(
+        @PathParam("id") int id
+    ) {
+        //do pasing and validation and update the datastore
+
+        //assume it exist in the db 
+        boolean exist = true;
+
+        if (!exist) {
+            return Response.status(Response.Status.NOT_FOUND).build();
+        }
+
+        //Delete from the db
+        //should return a valid JSON string
+        return Response.ok("Circle deleted: "+id).build();
+        
+    }//delete circle
 }
