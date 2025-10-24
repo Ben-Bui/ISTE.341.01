@@ -9,11 +9,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {//check if form submitted
     
     $user = $db->getUserByUsername($username);//get user from database
     
-    if ($user && hash('sha256', $password) === $user['Password']) {//verify password hash (corrected column name)
-        $_SESSION['user_id'] = $user['Id'];//store user ID in session (corrected column name)
-        $_SESSION['user_name'] = $user['Name'];//store user name in session (corrected column name)
-        $_SESSION['role_id'] = $user['RoleID'];//store role ID in session (corrected column name)
-        $_SESSION['project_id'] = $user['ProjectId'];//store project ID in session (corrected column name)
+    if ($user && hash('sha256', $password) === $user['Password']) {//verify password 
+        $_SESSION['user_id'] = $user['Id'];//store user ID 
+        $_SESSION['user_name'] = $user['Name'];//store user name 
+        $_SESSION['role_id'] = $user['RoleID'];//store role ID 
+        $_SESSION['project_id'] = $user['ProjectId'];//store project ID 
         header("Location: index.php");//redirect to dashboard
         exit;
     } else {

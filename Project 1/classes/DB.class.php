@@ -17,7 +17,7 @@ class DB {
         $data = [];
         try {
             $stmt = $this->dbh->prepare("SELECT * FROM user_details WHERE Username = :username");
-            $stmt->execute(["username"=>$username]);//run query with username parameter
+            $stmt->execute(["username"=>$username]);//run query with username 
             
             $data = $stmt->fetch(PDO::FETCH_ASSOC);//get single row as associative array
         } catch(PDOException $pe){
@@ -43,7 +43,7 @@ class DB {
 
     function insertUser($username, $password, $roleId, $projectId, $name) {
         $insertID = -1;
-        $hashedPassword = hash('sha256', $password);//hash password using sha256
+        $hashedPassword = hash('sha256', $password);//hash password
         try {
             $stmt = $this->dbh->prepare("INSERT INTO user_details (Username, Password, RoleID, ProjectId, Name) VALUES (:username, :password, :roleId, :projectId, :name)");
             $stmt->execute([
@@ -52,7 +52,7 @@ class DB {
                 "roleId"=>$roleId,
                 "projectId"=>$projectId,
                 "name"=>$name
-            ]);//run insert query with all parameters
+            ]);//run insert with all 
             $insertID = $this->dbh->lastInsertId();//get the new user ID
         } catch(PDOException $pe){
             echo $pe->getMessage();//show error if something wrong
@@ -63,7 +63,7 @@ class DB {
     function deleteUser($id) {
         $numRows = 0;
         try {
-            // Remove user from bugs assignments first
+            // Remove user from bugs assignments 
             $stmt1 = $this->dbh->prepare("UPDATE bugs SET assignedToId = NULL WHERE assignedToId = :id");
             $stmt1->execute(["id"=>$id]);//clear user from bug assignments
             
@@ -89,12 +89,12 @@ class DB {
         $params = [];//array to store parameters
         
         if (isset($filters['project']) && $filters['project'] != 'all') {
-            $query .= " AND b.projectId = :project";//add project filter
-            $params["project"] = $filters['project'];//store project parameter
+            $query .= " AND b.projectId = :project";// project filter
+            $params["project"] = $filters['project'];
         }
         
         if (isset($filters['status']) && $filters['status'] == 'open') {
-            $query .= " AND b.statusId != 3";//show only open bugs (not closed)
+            $query .= " AND b.statusId != 3";//show open bugs
         }
         
         if (isset($filters['status']) && $filters['status'] == 'overdue') {
@@ -109,7 +109,7 @@ class DB {
         
         try {
             $stmt = $this->dbh->prepare($query);
-            $stmt->execute($params);//run query with parameters
+            $stmt->execute($params);
             
             while ($row = $stmt->fetch(PDO::FETCH_ASSOC)){//get each row as associative array
                 $data[] = $row;//add bug to data array
@@ -146,7 +146,7 @@ class DB {
                 "summary"=>$bugData['summary'],
                 "description"=>$bugData['description'],
                 "targetDate"=>$bugData['targetDate']
-            ]);//run insert query with all bug data
+            ]);
             $insertID = $this->dbh->lastInsertId();//get the new bug ID
         } catch(PDOException $pe){
             echo $pe->getMessage();//show error if something wrong
@@ -168,7 +168,7 @@ class DB {
                 "targetDate"=>$bugData['targetDate'],
                 "dateClosed"=>$bugData['dateClosed'],
                 "id"=>$id
-            ]);//run update query with all parameters
+            ]);
             $numRows = $stmt->rowCount();//get number of rows affected
         } catch(PDOException $pe){
             echo $pe->getMessage();//show error if something wrong
@@ -180,7 +180,7 @@ class DB {
         $data = [];
         try {
             $stmt = $this->dbh->prepare("SELECT * FROM project");
-            $stmt->execute();//run query to get all projects
+            $stmt->execute();
             
             while ($row = $stmt->fetch(PDO::FETCH_ASSOC)){//loop through each row
                 $data[] = $row;//add project to data array
@@ -264,7 +264,7 @@ class DB {
         $data = [];
         try {
             $stmt = $this->dbh->prepare("SELECT * FROM user_details WHERE ProjectId = :projectId");
-            $stmt->execute(["projectId"=>$projectId]);//run query with project ID
+            $stmt->execute(["projectId"=>$projectId]);
             
             while ($row = $stmt->fetch(PDO::FETCH_ASSOC)){//loop through each row
                 $data[] = $row;//add user to data array
@@ -278,7 +278,7 @@ class DB {
     function getAllUsersForAssignment() {
         $data = [];
         try {
-            $stmt = $this->dbh->prepare("SELECT * FROM user_details WHERE RoleID != 1");//exclude admins
+            $stmt = $this->dbh->prepare("SELECT * FROM user_details WHERE RoleID != 1");//no admins
             $stmt->execute();//run query to get assignable users
             
             while ($row = $stmt->fetch(PDO::FETCH_ASSOC)){//loop through each row

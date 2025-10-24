@@ -1,6 +1,6 @@
 <?php
 require_once "includes/auth.php";
-checkAuth();//ensure user is logged in
+checkAuth();//make sure user is logged in
 
 if (!isAdmin() && !isManager()) {//only admins and managers can access
     header("Location: index.php");
@@ -40,7 +40,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {//check if form submitted
     }
 }
 
-$projects = $db->getAllProjects();//get all projects for display
+$projects = $db->getAllProjects();
 ?>
 <?php include "includes/header.php"; ?>
 <h1>Project Management</h1>

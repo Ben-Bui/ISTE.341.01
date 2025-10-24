@@ -1,6 +1,6 @@
 <?php
 require_once "includes/auth.php";
-checkAuth();//ensure user is logged in
+checkAuth();//make sure user is logged in
 
 if (!isAdmin()) {//only admins can access user management
     header("Location: index.php");
@@ -39,9 +39,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {//check if form submitted
     }
 }
 
-$users = $db->getAllUsers();//get all users for display
-$roles = $db->getRoles();//get all roles for dropdown
-$projects = $db->getAllProjects();//get all projects for dropdown
+$users = $db->getAllUsers();
+$roles = $db->getRoles();
+$projects = $db->getAllProjects();
 ?>
 <?php include "includes/header.php"; ?>
 <h1>User Management</h1>

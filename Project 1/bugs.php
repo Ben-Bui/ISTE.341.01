@@ -1,27 +1,26 @@
 <?php
 require_once "includes/auth.php";
-checkAuth();//ensure user is logged in
+checkAuth();//make sure user is logged in
 require_once "classes/DB.class.php";
 
 $db = new DB();
-$action = $_GET['action'] ?? 'list';//get action from URL or default to list
+$action = $_GET['action'] ?? 'list';
 $message = '';
 
-// Handle form submissions
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {//check if form submitted
     if ($action == 'create') {
         $bugData = [
             'projectId' => sanitizeInput($_POST['projectId']),
             'ownerId' => $_SESSION['user_id'],//current user is the owner
             'assignedToId' => !empty($_POST['assignedToId']) ? sanitizeInput($_POST['assignedToId']) : null,
-            'statusId' => (!empty($_POST['assignedToId']) && $_POST['assignedToId'] != '') ? 2 : 1, // Better assignment check
-            'priorityId' => !empty($_POST['priorityId']) ? sanitizeInput($_POST['priorityId']) : 2, // Default Medium=2
+            'statusId' => (!empty($_POST['assignedToId']) && $_POST['assignedToId'] != '') ? 2 : 1, // check if bug assign
+            'priorityId' => !empty($_POST['priorityId']) ? sanitizeInput($_POST['priorityId']) : 2, // big priority to medium default
             'summary' => sanitizeInput($_POST['summary']),
             'description' => sanitizeInput($_POST['description']),
             'targetDate' => !empty($_POST['targetDate']) ? sanitizeInput($_POST['targetDate']) : null
         ];
         
-        // Validate target date is in future if provided
+        // check date
         if (!empty($bugData['targetDate']) && !validateFutureDate($bugData['targetDate'])) {
             $message = "Error: Target date must be in the future.";
         } elseif (!empty($bugData['summary']) && !empty($bugData['description']) && !empty($bugData['projectId'])) {
@@ -39,7 +38,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {//check if form submitted
         $bugId = sanitizeInput($_POST['id']);
         $currentBug = $db->getBugById($bugId);//get current bug data
         
-        // Check if user has permission to edit this bug using canEditBug function
+        // Check if user has permission to edit this bug u
         $canEdit = canEditBug($currentBug['assignedToId'], $_SESSION['user_id'], $_SESSION['role_id']);
         
         if (!$canEdit) {
@@ -56,7 +55,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {//check if form submitted
                 'dateClosed' => ($_POST['statusId'] == 3 && empty($_POST['dateClosed'])) ? date('Y-m-d H:i:s') : $_POST['dateClosed']
             ];
             
-            // Validate target date is in future if provided
             if (!empty($bugData['targetDate']) && !validateFutureDate($bugData['targetDate'])) {
                 $message = "Error: Target date must be in the future.";
             } else {
@@ -73,12 +71,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {//check if form submitted
 }
 
 // Get data for filters and forms
-$projects = $db->getAllProjects();//get all projects for dropdown
-$statuses = $db->getStatuses();//get all statuses for dropdown
-$priorities = $db->getPriorities();//get all priorities for dropdown
-$users = $db->getAllUsersForAssignment();//get users for assignment
+$projects = $db->getAllProjects();
+$statuses = $db->getStatuses();
+$priorities = $db->getPriorities();
+$users = $db->getAllUsersForAssignment();
 
-// Apply filters for listing
+// check what user is filtering
 $filters = [];
 if (isset($_GET['project']) && $_GET['project'] != 'all') {
     $filters['project'] = sanitizeInput($_GET['project']);
@@ -87,10 +85,10 @@ if (isset($_GET['status'])) {
     $filters['status'] = sanitizeInput($_GET['status']);
 }
 
-// Get bugs based on user role and filters
+// Get bugs based on user role/filters
 if (isUser()) {
-    $userProject = $db->getUserProject($_SESSION['user_id']);//get user's project
-    $filters['project'] = $userProject['ProjectId'];//filter by user's project only
+    $userProject = $db->getUserProject($_SESSION['user_id']);//get project
+    $filters['project'] = $userProject['ProjectId'];//filter project only
 }
 $bugs = $db->getAllBugs($filters);//get bugs based on filters
 ?>
@@ -110,12 +108,12 @@ $bugs = $db->getAllBugs($filters);//get bugs based on filters
                 <option value="">Select Project</option>
                 <?php foreach ($projects as $project): ?>
                     <?php if (isUser()): ?>
-                        <!-- Users can only select their assigned project -->
+                        <!-- Users can only select their assign project -->
                         <?php if ($project['Id'] == getCurrentUserProject()): ?>
                             <option value="<?php echo $project['Id']; ?>" selected><?php echo $project['Project']; ?></option>
                         <?php endif; ?>
                     <?php else: ?>
-                        <!-- Admins and managers can select any project -->
+                        <!-- Admins/managers can select any project -->
                         <option value="<?php echo $project['Id']; ?>"><?php echo $project['Project']; ?></option>
                     <?php endif; ?>
                 <?php endforeach; ?>
@@ -151,7 +149,7 @@ $bugs = $db->getAllBugs($filters);//get bugs based on filters
             </div>
             <div class="form-group">
                 <label>Target Date</label>
-                <input type="date" name="targetDate" min="<?php echo date('Y-m-d'); ?>"><!-- restrict to future dates -->
+                <input type="date" name="targetDate" min="<?php echo date('Y-m-d'); ?>">
             </div>
         <?php endif; ?>
         <input type="submit" value="Report Bug">
@@ -163,7 +161,7 @@ $bugs = $db->getAllBugs($filters);//get bugs based on filters
     $bugId = sanitizeInput($_GET['id']);
     $bug = $db->getBugById($bugId);
     
-    // Check if user has permission to edit this bug using canEditBug function
+    // Check if user has permission to edit bug 
     $canEdit = canEditBug($bug['assignedToId'], $_SESSION['user_id'], $_SESSION['role_id']);
     
     if (!$bug) {
@@ -226,7 +224,7 @@ $bugs = $db->getAllBugs($filters);//get bugs based on filters
         </div>
         <div class="form-group">
             <label>Target Date</label>
-            <input type="date" name="targetDate" value="<?php echo $bug['targetDate'] ? substr($bug['targetDate'], 0, 10) : ''; ?>" min="<?php echo date('Y-m-d'); ?>"><!-- restrict to future dates -->
+            <input type="date" name="targetDate" value="<?php echo $bug['targetDate'] ? substr($bug['targetDate'], 0, 10) : ''; ?>" min="<?php echo date('Y-m-d'); ?>">
         </div>
         <input type="submit" value="Update Bug">
         <a href="bugs.php">Cancel</a>
@@ -300,7 +298,6 @@ $bugs = $db->getAllBugs($filters);//get bugs based on filters
                     <td><?php echo $bug['dateRaised']; ?></td>
                     <td>
                         <?php
-                        // Check if user can edit this bug using canEditBug function
                         $canEdit = canEditBug($bug['assignedToId'], $_SESSION['user_id'], $_SESSION['role_id']);
                         
                         if ($canEdit): ?>
