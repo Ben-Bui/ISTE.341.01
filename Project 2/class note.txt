@@ -1,1 +1,2 @@
 update existing one first, modify that object, call update method
+department class, employee class already have in data layer
