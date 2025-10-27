@@ -29,6 +29,18 @@ public class Test {
         System.out.println(ac.createCircle(7).getLocation());
         System.out.println("***********\n");
 
+
+        System.out.println(ac.updateCircle(1,
+        "{\"raidus\":0,\"id\":1,\"area\":34.4}"));
+        System.out.println(ac.updateCircle(1,
+        "{\"raidus\":2.2,\"id\":1,\"area\":34.4}"));
+        System.out.println(ac.updateCircle(1,
+        "{\"raidus\":2.2,\"id\":1,\"area\":34.4}").getEntity());
+        System.out.println("***********\n");
+
+        System.out.println(ac.deleteCircle(1));
+        System.out.println(ac.deleteCircle(1).getEntity());
+        System.out.println("***********\n");
     }//Main
 
 }//Test

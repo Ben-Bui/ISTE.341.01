@@ -89,10 +89,10 @@ public class MyResource {
         Circle c = new Circle(radius);
 
         //comment out the following for non-deploy testing
-        // Link lnk = Link.fromUri(uriInfo.getPath()+"/"+c.id)
-        //     .rel("self").build();
-        Link lnk = Link.fromUri("http://localhost:8080/Circle/"+c.id)
+        Link lnk = Link.fromUri(uriInfo.getPath()+"/"+c.id)
             .rel("self").build();
+        // Link lnk = Link.fromUri("http://localhost:8080/Circle/"+c.id)
+        //     .rel("self").build();
 
             return Response.status(Response.Status.CREATED)
                 .location(lnk.getUri()).build();
