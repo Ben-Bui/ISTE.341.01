@@ -1,0 +1,11 @@
+{
+  "version": 2,
+  "dgSpecHash": "dUXNmBUsF+A=",
+  "success": true,
+  "projectFilePath": "D:\\Profiles\\btb4516\\ISTE.341.01\\dotnetdemos\\ProductService\\ProductService.csproj",
+  "expectedPackageFiles": [
+    "D:\\Profiles\\btb4516\\.nuget\\packages\\microsoft.aspnetcore.openapi\\9.0.7\\microsoft.aspnetcore.openapi.9.0.7.nupkg.sha512",
+    "D:\\Profiles\\btb4516\\.nuget\\packages\\microsoft.openapi\\1.6.17\\microsoft.openapi.1.6.17.nupkg.sha512"
+  ],
+  "logs": []
+}
