@@ -64,13 +64,13 @@ function deleteProductsHandler($id="") {
     //delete from database
     http_response_code(201);//or 200
     header("Content-Type: application/json");
-    echo json_encode("response"=>"Product $id deleted");//just echoing back for now 
+    json_encode(["response" => "Product $id deleted"]);//just echoing back for now 
 
 }//deleteProductsHandler
 
-fucntion findElementByKeyValue($array,$key,$value){
+function findElementByKeyValue($array,$key,$value){
     foreach ($array as $item){
-        if (isset($item[$key]) && $items[$key] ===$value){
+        if (isset($item[$key]) && $item[$key] ===$value){
             return $item;
         }
     }
