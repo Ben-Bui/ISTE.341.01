@@ -37,7 +37,7 @@ app.MapGet("/Product", () =>  products);
 
 app.MapGet("/Product/{id}", (int id) =>  
 {
-    Product product = products.Find(x => x.Id == id); 
+    Product product = products.Find(x => x.Id == id)!; 
     
     if (product == null)
     {
