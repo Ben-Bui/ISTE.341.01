@@ -3,24 +3,57 @@ let events = require('events');
 //create an event emitter object
 let eventEmmitter = new events.EventEmitter();
 
-//create an event handler
-let connectHandler = function connected(){
-    console.log('connection successful');
-    //fire off another event
-    eventEmmitter.emit('data_received');
-}
+//listener 1
+let listener1 = () =>{
+    console.log("listener 1 executed");
+};
 
-//bind the events with handlers
-//pre-defined handler
-eventEmmitter.on('connection', connectHandler);
+//listener 2
+let listener2 = () =>{
+    console.log("listener 2 executed");
+};
 
-//using an anonymous handler
-eventEmmitter.on('data_received', function () {
-    console.log("data received successfully");
-});
+//bind listeners to events
+eventEmmitter.addListener("connection", listener1);
+eventEmmitter.on("connection", listener2);
+
+let evenListeners = eventEmmitter.listenerCount('connection');
+console.log(evenListeners + " listening to connection event");
 
 eventEmmitter.emit("connection");
-console.log("Pogram Ended");
+
+eventEmmitter.removeAllListeners("connection", listener1);
+
+eventEmmitter.emit("connection");
+evenListeners = eventEmmitter.listenerCount("connection");
+console.log(evenListeners + " listening to connection event");
+
+console.log("Program Ended");
+
+// ****************************************************************
+// let events = require('events');
+
+// //create an event emitter object
+// let eventEmmitter = new events.EventEmitter();
+
+// //create an event handler
+// let connectHandler = function connected(){
+//     console.log('connection successful');
+//     //fire off another event
+//     eventEmmitter.emit('data_received');
+// }
+
+// //bind the events with handlers
+// //pre-defined handler
+// eventEmmitter.on('connection', connectHandler);
+
+// //using an anonymous handler
+// eventEmmitter.on('data_received', function () {
+//     console.log("data received successfully");
+// });
+
+// eventEmmitter.emit("connection");
+// console.log("Pogram Ended");
 
 // **********************************************************************
 // let fs = require("fs");

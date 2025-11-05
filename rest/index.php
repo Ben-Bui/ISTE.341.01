@@ -15,7 +15,7 @@ switch ($method." ".$routeParts[0]) {
         $id = isset($routeParts[1]) ? $routeParts[1] : "";
         getProductsHandler($id);
         break;
-    case 'PSOT products':
+    case 'POST products':
         createProductsHandler();
         break;
     case 'PUT products':
