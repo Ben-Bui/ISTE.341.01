@@ -1,14 +1,47 @@
 const express = require("express");
+const cookieParser = require("cookie-parser");
+
 const app = express();
+app.use(express.static("public"));
+app.use(cookieParser());
+let urlencodedParser = express.urlencoded({extended: false});
 
 app.get("/",(req,res) => {
     console.log("Got a Get request for the homepage");
-    res.send('Hello GET');
+    console.log("Cookies: ", req.cookies);
+    res.json(req.cookies);
+    //res.send('Hello GET');
+});
+
+app.get("/index.html",(req,res)=>{
+    res.sendFile(__dirname + "/index.html");
+});
+
+app.get("/process_get",(req,res)=>{
+    let response = {
+        first_name:req.query.first_name,
+        last_name:req.query.last_name
+    };
+    console.log(response);
+    //res.end(JSON.stringify(response));
+    //res.send(JSON.stringify(response));
+    res.json(response)
+});
+
+app.post("/process_post", urlencodedParser,(req,res)=>{
+    let response = {
+        first_name: req.body.first_name,
+        last_name: req.body.last_name
+    };
+    console.log(response);
+    //res.end(JSON.stringify(response));
+    //res.send(JSON.stringify(response));
+    res.json(response)
 });
 
 app.post("/",(req,res) => {
     console.log("Got a Post request for the homepage");
-    res.send('Hello Post');
+    res.send('Hello POST');
 });
 
 app.delete("/del_user",(req,res) => {
