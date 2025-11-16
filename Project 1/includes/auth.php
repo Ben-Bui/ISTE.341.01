@@ -29,25 +29,25 @@ function isUser() {
 }
 
 function getCurrentUserProject() {
-    return $_SESSION['project_id'] ?? null;//get user's assigned project or null
+    return $_SESSION['project_id'] ?? null;//get user assigned project or null
 }
 
 function sanitizeInput($input) {
-    return htmlspecialchars(strip_tags(trim($input)));//clean input to prevent XSS
+    return htmlspecialchars(strip_tags(trim($input)));//sanitizaition 
 }
 
 function validateDate($date) {
-    return preg_match('/^\d{4}-\d{2}-\d{2}$/', $date);//check if date format is YYYY-MM-DD
+    return preg_match('/^\d{4}-\d{2}-\d{2}$/', $date);//check if date format 
 }
 
 function validateFutureDate($date) {
-    return strtotime($date) > time();//check if date is in future
+    return strtotime($date) > time();//block past date
 }
 
 function canEditBug($bugAssignedToId, $currentUserId, $currentUserRole) {
     if ($currentUserRole == 1 || $currentUserRole == 2) {//admin or manager
         return true;//admins and managers can edit any bug
-    } elseif ($currentUserRole == 3 && $bugAssignedToId == $currentUserId) {//user and bug assigned to them
+    } elseif ($currentUserRole == 3 && $bugAssignedToId == $currentUserId) {//user and bug assign to them
         return true;//users can only edit bugs assigned to them
     }
     return false;//default cannot edit
