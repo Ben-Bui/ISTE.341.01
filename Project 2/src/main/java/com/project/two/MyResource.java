@@ -24,7 +24,7 @@ public class MyResource {
         return "Got it!";
     }
 
-    // 3) DELETE /company - Delete all company data
+    //DELETE all company data
     @Path("company")
     @DELETE
     @Produces(MediaType.APPLICATION_JSON)
@@ -41,7 +41,7 @@ public class MyResource {
         }
     }
 
-    // 4) GET /department - Get single department
+    //GET single department
     @Path("department")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
@@ -72,7 +72,7 @@ public class MyResource {
         }
     }
 
-    // 5) GET /departments - Get all departments
+    //Get all departments
     @Path("departments")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
@@ -106,7 +106,7 @@ public class MyResource {
         }
     }
 
-    // 6) PUT /department - Update department
+    //PUT department
     @Path("department")
     @PUT
     @Consumes(MediaType.APPLICATION_JSON)
@@ -141,7 +141,7 @@ public class MyResource {
         }
     }
 
-    // 7) POST /department - Create department
+    //POST deparrtment
     @Path("department")
     @POST
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
@@ -171,7 +171,7 @@ public class MyResource {
         }
     }
 
-    // 8) DELETE /department - Delete department
+    //DELETE department
     @Path("department")
     @DELETE
     @Produces(MediaType.APPLICATION_JSON)
@@ -195,7 +195,7 @@ public class MyResource {
         }
     }
 
-    // 9) GET /employee - Get single employee
+    //GET single employee
     @Path("employee")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
@@ -207,7 +207,7 @@ public class MyResource {
             bl.close();
             
             if (emp != null) {
-                // Format date as yyyy-MM-dd
+                // Format date as 
                 java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd");
                 String hireDate = sdf.format(emp.getHireDate());
                 
@@ -233,7 +233,7 @@ public class MyResource {
         }
     }
 
-    // 10) GET /employees - Get all employees
+    //GET all employees
     @Path("employees")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
@@ -274,7 +274,7 @@ public class MyResource {
         }
     }
 
-    // 11) POST /employee - Create employee
+    //POST employee
     @Path("employee")
     @POST
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
@@ -311,7 +311,7 @@ public class MyResource {
         }
     }
 
-    // 12) PUT /employee - Update employee
+    //PUT employee
     @Path("employee")
     @PUT
     @Consumes(MediaType.APPLICATION_JSON)
@@ -353,7 +353,7 @@ public class MyResource {
         }
     }
 
-    // 13) DELETE /employee - Delete employee
+    //DELETE employee
     @Path("employee")
     @DELETE
     @Produces(MediaType.APPLICATION_JSON)
@@ -377,7 +377,7 @@ public class MyResource {
         }
     }
 
-    // 14) GET /timecard - Get single timecard
+    // GET single timecard
     @Path("timecard")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
@@ -413,7 +413,7 @@ public class MyResource {
         }
     }
 
-    // 15) GET /timecards - Get all timecards for employee
+    //GET all timecards for employee
     @Path("timecards")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
@@ -452,7 +452,7 @@ public class MyResource {
         }
     }
 
-    // 16) POST /timecard - Create timecard
+    //POST timecard
     @Path("timecard")
     @POST
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
@@ -481,7 +481,7 @@ public class MyResource {
         }
     }
 
-    // 17) PUT /timecard - Update timecard
+    //PUT timecard
     @Path("timecard")
     @PUT
     @Consumes(MediaType.APPLICATION_JSON)
@@ -515,7 +515,7 @@ public class MyResource {
         }
     }
 
-    // 18) DELETE /timecard - Delete timecard
+    //DELETE timecard
     @Path("timecard")
     @DELETE
     @Produces(MediaType.APPLICATION_JSON)
@@ -539,7 +539,7 @@ public class MyResource {
         }
     }
 
-    // Helper method to escape JSON strings
+    // cleanup text
     private String escapeJson(String input) {
         if (input == null) return "";
         return input.replace("\\", "\\\\")
