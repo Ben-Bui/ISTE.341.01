@@ -1,9 +1,5 @@
 package com.project.two;
 
-import jakarta.ws.rs.GET;
-import jakarta.ws.rs.Path;
-import jakarta.ws.rs.Produces;
-import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.*;
 import com.project.two.business.BusinessLayer;
@@ -36,8 +32,7 @@ public class MyResource {
             return Response.ok("{\"success\":\"" + company + "'s information deleted.\"}").build();
         } catch (Exception e) {
             bl.close();
-            return Response.status(Response.Status.BAD_REQUEST)
-                   .entity("{\"error\":\"" + e.getMessage() + "\"}").build();
+            return Response.status(Response.Status.BAD_REQUEST).entity("{\"error\":\"" + e.getMessage() + "\"}").build();
         }
     }
 
@@ -45,30 +40,21 @@ public class MyResource {
     @Path("department")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getDepartment(@QueryParam("company") String company, 
-                                 @QueryParam("dept_id") int dept_id) {
+    public Response getDepartment(@QueryParam("company") String company, @QueryParam("dept_id") int dept_id) {
         BusinessLayer bl = new BusinessLayer(company);
         try {
             Department dept = bl.getDepartment(dept_id);
             bl.close();
             
             if (dept != null) {
-                String json = "{" +
-                    "\"dept_id\":" + dept.getId() + "," +
-                    "\"company\":\"" + dept.getCompany() + "\"," +
-                    "\"dept_name\":\"" + escapeJson(dept.getDeptName()) + "\"," +
-                    "\"dept_no\":\"" + escapeJson(dept.getDeptNo()) + "\"," +
-                    "\"location\":\"" + escapeJson(dept.getLocation()) + "\"" +
-                    "}";
+                String json = "{\"dept_id\":" + dept.getId() + ",\"company\":\"" + dept.getCompany() + "\",\"dept_name\":\"" + dept.getDeptName() + "\",\"dept_no\":\"" + dept.getDeptNo() + "\",\"location\":\"" + dept.getLocation() + "\"}";
                 return Response.ok(json).build();
             } else {
-                return Response.status(Response.Status.NOT_FOUND)
-                       .entity("{\"error\":\"Department not found\"}").build();
+                return Response.status(Response.Status.NOT_FOUND).entity("{\"error\":\"Department not found\"}").build();
             }
         } catch (Exception e) {
             bl.close();
-            return Response.status(Response.Status.BAD_REQUEST)
-                   .entity("{\"error\":\"" + e.getMessage() + "\"}").build();
+            return Response.status(Response.Status.BAD_REQUEST).entity("{\"error\":\"" + e.getMessage() + "\"}").build();
         }
     }
 
@@ -85,13 +71,7 @@ public class MyResource {
             StringBuilder json = new StringBuilder("[");
             for (int i = 0; i < departments.size(); i++) {
                 Department dept = departments.get(i);
-                json.append("{" +
-                    "\"dept_id\":" + dept.getId() + "," +
-                    "\"company\":\"" + dept.getCompany() + "\"," +
-                    "\"dept_name\":\"" + escapeJson(dept.getDeptName()) + "\"," +
-                    "\"dept_no\":\"" + escapeJson(dept.getDeptNo()) + "\"," +
-                    "\"location\":\"" + escapeJson(dept.getLocation()) + "\"" +
-                    "}");
+                json.append("{\"dept_id\":" + dept.getId() + ",\"company\":\"" + dept.getCompany() + "\",\"dept_name\":\"" + dept.getDeptName() + "\",\"dept_no\":\"" + dept.getDeptNo() + "\",\"location\":\"" + dept.getLocation() + "\"}");
                 if (i < departments.size() - 1) {
                     json.append(",");
                 }
@@ -101,8 +81,7 @@ public class MyResource {
             return Response.ok(json.toString()).build();
         } catch (Exception e) {
             bl.close();
-            return Response.status(Response.Status.BAD_REQUEST)
-                   .entity("{\"error\":\"" + e.getMessage() + "\"}").build();
+            return Response.status(Response.Status.BAD_REQUEST).entity("{\"error\":\"" + e.getMessage() + "\"}").build();
         }
     }
 
@@ -125,49 +104,30 @@ public class MyResource {
             Department updatedDept = bl.updateDepartment(dept_id, dept_name, dept_no, location);
             bl.close();
             
-            String responseJson = "{" +
-                "\"success\":{" +
-                "\"dept_id\":" + updatedDept.getId() + "," +
-                "\"company\":\"" + updatedDept.getCompany() + "\"," +
-                "\"dept_name\":\"" + escapeJson(updatedDept.getDeptName()) + "\"," +
-                "\"dept_no\":\"" + escapeJson(updatedDept.getDeptNo()) + "\"," +
-                "\"location\":\"" + escapeJson(updatedDept.getLocation()) + "\"" +
-                "}}";
+            String responseJson = "{\"success\":{\"dept_id\":" + updatedDept.getId() + ",\"company\":\"" + updatedDept.getCompany() + "\",\"dept_name\":\"" + updatedDept.getDeptName() + "\",\"dept_no\":\"" + updatedDept.getDeptNo() + "\",\"location\":\"" + updatedDept.getLocation() + "\"}}";
             return Response.ok(responseJson).build();
         } catch (Exception e) {
             if (bl != null) bl.close();
-            return Response.status(Response.Status.BAD_REQUEST)
-                   .entity("{\"error\":\"" + e.getMessage() + "\"}").build();
+            return Response.status(Response.Status.BAD_REQUEST).entity("{\"error\":\"" + e.getMessage() + "\"}").build();
         }
     }
 
-    //POST deparrtment
+    //POST department
     @Path("department")
     @POST
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response createDepartment(@FormParam("company") String company,
-                                    @FormParam("dept_name") String dept_name,
-                                    @FormParam("dept_no") String dept_no,
-                                    @FormParam("location") String location) {
+    public Response createDepartment(@FormParam("company") String company, @FormParam("dept_name") String dept_name, @FormParam("dept_no") String dept_no, @FormParam("location") String location) {
         BusinessLayer bl = new BusinessLayer(company);
         try {
             Department createdDept = bl.createDepartment(dept_name, dept_no, location);
             bl.close();
             
-            String responseJson = "{" +
-                "\"success\":{" +
-                "\"dept_id\":" + createdDept.getId() + "," +
-                "\"company\":\"" + createdDept.getCompany() + "\"," +
-                "\"dept_name\":\"" + escapeJson(createdDept.getDeptName()) + "\"," +
-                "\"dept_no\":\"" + escapeJson(createdDept.getDeptNo()) + "\"," +
-                "\"location\":\"" + escapeJson(createdDept.getLocation()) + "\"" +
-                "}}";
+            String responseJson = "{\"success\":{\"dept_id\":" + createdDept.getId() + ",\"company\":\"" + createdDept.getCompany() + "\",\"dept_name\":\"" + createdDept.getDeptName() + "\",\"dept_no\":\"" + createdDept.getDeptNo() + "\",\"location\":\"" + createdDept.getLocation() + "\"}}";
             return Response.ok(responseJson).build();
         } catch (Exception e) {
             bl.close();
-            return Response.status(Response.Status.BAD_REQUEST)
-                   .entity("{\"error\":\"" + e.getMessage() + "\"}").build();
+            return Response.status(Response.Status.BAD_REQUEST).entity("{\"error\":\"" + e.getMessage() + "\"}").build();
         }
     }
 
@@ -175,8 +135,7 @@ public class MyResource {
     @Path("department")
     @DELETE
     @Produces(MediaType.APPLICATION_JSON)
-    public Response deleteDepartment(@QueryParam("company") String company,
-                                    @QueryParam("dept_id") int dept_id) {
+    public Response deleteDepartment(@QueryParam("company") String company, @QueryParam("dept_id") int dept_id) {
         BusinessLayer bl = new BusinessLayer(company);
         try {
             int rowsDeleted = bl.deleteDepartment(dept_id);
@@ -185,13 +144,11 @@ public class MyResource {
             if (rowsDeleted > 0) {
                 return Response.ok("{\"success\":\"Department " + dept_id + " from " + company + " deleted.\"}").build();
             } else {
-                return Response.status(Response.Status.NOT_FOUND)
-                       .entity("{\"error\":\"Department not found\"}").build();
+                return Response.status(Response.Status.NOT_FOUND).entity("{\"error\":\"Department not found\"}").build();
             }
         } catch (Exception e) {
             bl.close();
-            return Response.status(Response.Status.BAD_REQUEST)
-                   .entity("{\"error\":\"" + e.getMessage() + "\"}").build();
+            return Response.status(Response.Status.BAD_REQUEST).entity("{\"error\":\"" + e.getMessage() + "\"}").build();
         }
     }
 
@@ -199,37 +156,24 @@ public class MyResource {
     @Path("employee")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getEmployee(@QueryParam("company") String company,
-                               @QueryParam("emp_id") int emp_id) {
+    public Response getEmployee(@QueryParam("company") String company, @QueryParam("emp_id") int emp_id) {
         BusinessLayer bl = new BusinessLayer(company);
         try {
             Employee emp = bl.getEmployee(emp_id);
             bl.close();
             
             if (emp != null) {
-                // Format date as 
                 java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd");
                 String hireDate = sdf.format(emp.getHireDate());
                 
-                String json = "{" +
-                    "\"emp_id\":" + emp.getId() + "," +
-                    "\"emp_name\":\"" + escapeJson(emp.getEmpName()) + "\"," +
-                    "\"emp_no\":\"" + escapeJson(emp.getEmpNo()) + "\"," +
-                    "\"hire_date\":\"" + hireDate + "\"," +
-                    "\"job\":\"" + escapeJson(emp.getJob()) + "\"," +
-                    "\"salary\":" + emp.getSalary() + "," +
-                    "\"dept_id\":" + emp.getDeptId() + "," +
-                    "\"mng_id\":" + emp.getMngId() +
-                    "}";
+                String json = "{\"emp_id\":" + emp.getId() + ",\"emp_name\":\"" + emp.getEmpName() + "\",\"emp_no\":\"" + emp.getEmpNo() + "\",\"hire_date\":\"" + hireDate + "\",\"job\":\"" + emp.getJob() + "\",\"salary\":" + emp.getSalary() + ",\"dept_id\":" + emp.getDeptId() + ",\"mng_id\":" + emp.getMngId() + "}";
                 return Response.ok(json).build();
             } else {
-                return Response.status(Response.Status.NOT_FOUND)
-                       .entity("{\"error\":\"Employee not found\"}").build();
+                return Response.status(Response.Status.NOT_FOUND).entity("{\"error\":\"Employee not found\"}").build();
             }
         } catch (Exception e) {
             bl.close();
-            return Response.status(Response.Status.BAD_REQUEST)
-                   .entity("{\"error\":\"" + e.getMessage() + "\"}").build();
+            return Response.status(Response.Status.BAD_REQUEST).entity("{\"error\":\"" + e.getMessage() + "\"}").build();
         }
     }
 
@@ -250,16 +194,7 @@ public class MyResource {
                 Employee emp = employees.get(i);
                 String hireDate = sdf.format(emp.getHireDate());
                 
-                json.append("{" +
-                    "\"emp_id\":" + emp.getId() + "," +
-                    "\"emp_name\":\"" + escapeJson(emp.getEmpName()) + "\"," +
-                    "\"emp_no\":\"" + escapeJson(emp.getEmpNo()) + "\"," +
-                    "\"hire_date\":\"" + hireDate + "\"," +
-                    "\"job\":\"" + escapeJson(emp.getJob()) + "\"," +
-                    "\"salary\":" + emp.getSalary() + "," +
-                    "\"dept_id\":" + emp.getDeptId() + "," +
-                    "\"mng_id\":" + emp.getMngId() +
-                    "}");
+                json.append("{\"emp_id\":" + emp.getId() + ",\"emp_name\":\"" + emp.getEmpName() + "\",\"emp_no\":\"" + emp.getEmpNo() + "\",\"hire_date\":\"" + hireDate + "\",\"job\":\"" + emp.getJob() + "\",\"salary\":" + emp.getSalary() + ",\"dept_id\":" + emp.getDeptId() + ",\"mng_id\":" + emp.getMngId() + "}");
                 if (i < employees.size() - 1) {
                     json.append(",");
                 }
@@ -269,8 +204,7 @@ public class MyResource {
             return Response.ok(json.toString()).build();
         } catch (Exception e) {
             bl.close();
-            return Response.status(Response.Status.BAD_REQUEST)
-                   .entity("{\"error\":\"" + e.getMessage() + "\"}").build();
+            return Response.status(Response.Status.BAD_REQUEST).entity("{\"error\":\"" + e.getMessage() + "\"}").build();
         }
     }
 
@@ -279,35 +213,17 @@ public class MyResource {
     @POST
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response createEmployee(@FormParam("company") String company,
-                                  @FormParam("emp_name") String emp_name,
-                                  @FormParam("emp_no") String emp_no,
-                                  @FormParam("hire_date") String hire_date,
-                                  @FormParam("job") String job,
-                                  @FormParam("salary") double salary,
-                                  @FormParam("dept_id") int dept_id,
-                                  @FormParam("mng_id") int mng_id) {
+    public Response createEmployee(@FormParam("company") String company, @FormParam("emp_name") String emp_name, @FormParam("emp_no") String emp_no, @FormParam("hire_date") String hire_date, @FormParam("job") String job, @FormParam("salary") double salary, @FormParam("dept_id") int dept_id, @FormParam("mng_id") int mng_id) {
         BusinessLayer bl = new BusinessLayer(company);
         try {
             Employee createdEmp = bl.createEmployee(emp_name, emp_no, hire_date, job, salary, dept_id, mng_id);
             bl.close();
             
-            String responseJson = "{" +
-                "\"success\":{" +
-                "\"emp_id\":" + createdEmp.getId() + "," +
-                "\"emp_name\":\"" + escapeJson(createdEmp.getEmpName()) + "\"," +
-                "\"emp_no\":\"" + escapeJson(createdEmp.getEmpNo()) + "\"," +
-                "\"hire_date\":\"" + hire_date + "\"," +
-                "\"job\":\"" + escapeJson(createdEmp.getJob()) + "\"," +
-                "\"salary\":" + createdEmp.getSalary() + "," +
-                "\"dept_id\":" + createdEmp.getDeptId() + "," +
-                "\"mng_id\":" + createdEmp.getMngId() +
-                "}}";
+            String responseJson = "{\"success\":{\"emp_id\":" + createdEmp.getId() + ",\"emp_name\":\"" + createdEmp.getEmpName() + "\",\"emp_no\":\"" + createdEmp.getEmpNo() + "\",\"hire_date\":\"" + hire_date + "\",\"job\":\"" + createdEmp.getJob() + "\",\"salary\":" + createdEmp.getSalary() + ",\"dept_id\":" + createdEmp.getDeptId() + ",\"mng_id\":" + createdEmp.getMngId() + "}}";
             return Response.ok(responseJson).build();
         } catch (Exception e) {
             bl.close();
-            return Response.status(Response.Status.BAD_REQUEST)
-                   .entity("{\"error\":\"" + e.getMessage() + "\"}").build();
+            return Response.status(Response.Status.BAD_REQUEST).entity("{\"error\":\"" + e.getMessage() + "\"}").build();
         }
     }
 
@@ -334,22 +250,11 @@ public class MyResource {
             Employee updatedEmp = bl.updateEmployee(emp_id, emp_name, emp_no, hire_date, job, salary, dept_id, mng_id);
             bl.close();
             
-            String responseJson = "{" +
-                "\"success\":{" +
-                "\"emp_id\":" + updatedEmp.getId() + "," +
-                "\"emp_name\":\"" + escapeJson(updatedEmp.getEmpName()) + "\"," +
-                "\"emp_no\":\"" + escapeJson(updatedEmp.getEmpNo()) + "\"," +
-                "\"hire_date\":\"" + hire_date + "\"," +
-                "\"job\":\"" + escapeJson(updatedEmp.getJob()) + "\"," +
-                "\"salary\":" + updatedEmp.getSalary() + "," +
-                "\"dept_id\":" + updatedEmp.getDeptId() + "," +
-                "\"mng_id\":" + updatedEmp.getMngId() +
-                "}}";
+            String responseJson = "{\"success\":{\"emp_id\":" + updatedEmp.getId() + ",\"emp_name\":\"" + updatedEmp.getEmpName() + "\",\"emp_no\":\"" + updatedEmp.getEmpNo() + "\",\"hire_date\":\"" + hire_date + "\",\"job\":\"" + updatedEmp.getJob() + "\",\"salary\":" + updatedEmp.getSalary() + ",\"dept_id\":" + updatedEmp.getDeptId() + ",\"mng_id\":" + updatedEmp.getMngId() + "}}";
             return Response.ok(responseJson).build();
         } catch (Exception e) {
             if (bl != null) bl.close();
-            return Response.status(Response.Status.BAD_REQUEST)
-                   .entity("{\"error\":\"" + e.getMessage() + "\"}").build();
+            return Response.status(Response.Status.BAD_REQUEST).entity("{\"error\":\"" + e.getMessage() + "\"}").build();
         }
     }
 
@@ -357,8 +262,7 @@ public class MyResource {
     @Path("employee")
     @DELETE
     @Produces(MediaType.APPLICATION_JSON)
-    public Response deleteEmployee(@QueryParam("company") String company,
-                                  @QueryParam("emp_id") int emp_id) {
+    public Response deleteEmployee(@QueryParam("company") String company, @QueryParam("emp_id") int emp_id) {
         BusinessLayer bl = new BusinessLayer(company);
         try {
             int rowsDeleted = bl.deleteEmployee(emp_id);
@@ -367,13 +271,11 @@ public class MyResource {
             if (rowsDeleted > 0) {
                 return Response.ok("{\"success\":\"Employee " + emp_id + " deleted.\"}").build();
             } else {
-                return Response.status(Response.Status.NOT_FOUND)
-                       .entity("{\"error\":\"Employee not found\"}").build();
+                return Response.status(Response.Status.NOT_FOUND).entity("{\"error\":\"Employee not found\"}").build();
             }
         } catch (Exception e) {
             bl.close();
-            return Response.status(Response.Status.BAD_REQUEST)
-                   .entity("{\"error\":\"" + e.getMessage() + "\"}").build();
+            return Response.status(Response.Status.BAD_REQUEST).entity("{\"error\":\"" + e.getMessage() + "\"}").build();
         }
     }
 
@@ -381,35 +283,25 @@ public class MyResource {
     @Path("timecard")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getTimecard(@QueryParam("company") String company,
-                               @QueryParam("timecard_id") int timecard_id) {
+    public Response getTimecard(@QueryParam("company") String company, @QueryParam("timecard_id") int timecard_id) {
         BusinessLayer bl = new BusinessLayer(company);
         try {
             Timecard tc = bl.getTimecard(timecard_id);
             bl.close();
             
             if (tc != null) {
-                // Format timestamps
                 java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                 String startTime = sdf.format(tc.getStartTime());
                 String endTime = sdf.format(tc.getEndTime());
                 
-                String json = "{" +
-                    "\"timecard\":{" +
-                    "\"timecard_id\":" + tc.getId() + "," +
-                    "\"start_time\":\"" + startTime + "\"," +
-                    "\"end_time\":\"" + endTime + "\"," +
-                    "\"emp_id\":" + tc.getEmpId() +
-                    "}}";
+                String json = "{\"timecard\":{\"timecard_id\":" + tc.getId() + ",\"start_time\":\"" + startTime + "\",\"end_time\":\"" + endTime + "\",\"emp_id\":" + tc.getEmpId() + "}}";
                 return Response.ok(json).build();
             } else {
-                return Response.status(Response.Status.NOT_FOUND)
-                       .entity("{\"error\":\"Timecard not found\"}").build();
+                return Response.status(Response.Status.NOT_FOUND).entity("{\"error\":\"Timecard not found\"}").build();
             }
         } catch (Exception e) {
             bl.close();
-            return Response.status(Response.Status.BAD_REQUEST)
-                   .entity("{\"error\":\"" + e.getMessage() + "\"}").build();
+            return Response.status(Response.Status.BAD_REQUEST).entity("{\"error\":\"" + e.getMessage() + "\"}").build();
         }
     }
 
@@ -417,8 +309,7 @@ public class MyResource {
     @Path("timecards")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getTimecards(@QueryParam("company") String company,
-                                @QueryParam("emp_id") int emp_id) {
+    public Response getTimecards(@QueryParam("company") String company, @QueryParam("emp_id") int emp_id) {
         BusinessLayer bl = new BusinessLayer(company);
         try {
             List<Timecard> timecards = bl.getTimecards(emp_id);
@@ -432,12 +323,7 @@ public class MyResource {
                 String startTime = sdf.format(tc.getStartTime());
                 String endTime = sdf.format(tc.getEndTime());
                 
-                json.append("{" +
-                    "\"timecard_id\":" + tc.getId() + "," +
-                    "\"start_time\":\"" + startTime + "\"," +
-                    "\"end_time\":\"" + endTime + "\"," +
-                    "\"emp_id\":" + tc.getEmpId() +
-                    "}");
+                json.append("{\"timecard_id\":" + tc.getId() + ",\"start_time\":\"" + startTime + "\",\"end_time\":\"" + endTime + "\",\"emp_id\":" + tc.getEmpId() + "}");
                 if (i < timecards.size() - 1) {
                     json.append(",");
                 }
@@ -447,8 +333,7 @@ public class MyResource {
             return Response.ok(json.toString()).build();
         } catch (Exception e) {
             bl.close();
-            return Response.status(Response.Status.BAD_REQUEST)
-                   .entity("{\"error\":\"" + e.getMessage() + "\"}").build();
+            return Response.status(Response.Status.BAD_REQUEST).entity("{\"error\":\"" + e.getMessage() + "\"}").build();
         }
     }
 
@@ -457,27 +342,17 @@ public class MyResource {
     @POST
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response createTimecard(@FormParam("company") String company,
-                                  @FormParam("emp_id") int emp_id,
-                                  @FormParam("start_time") String start_time,
-                                  @FormParam("end_time") String end_time) {
+    public Response createTimecard(@FormParam("company") String company, @FormParam("emp_id") int emp_id, @FormParam("start_time") String start_time, @FormParam("end_time") String end_time) {
         BusinessLayer bl = new BusinessLayer(company);
         try {
             Timecard createdTc = bl.createTimecard(emp_id, start_time, end_time);
             bl.close();
             
-            String responseJson = "{" +
-                "\"success\":{" +
-                "\"timecard_id\":" + createdTc.getId() + "," +
-                "\"start_time\":\"" + start_time + "\"," +
-                "\"end_time\":\"" + end_time + "\"," +
-                "\"emp_id\":" + createdTc.getEmpId() +
-                "}}";
+            String responseJson = "{\"success\":{\"timecard_id\":" + createdTc.getId() + ",\"start_time\":\"" + start_time + "\",\"end_time\":\"" + end_time + "\",\"emp_id\":" + createdTc.getEmpId() + "}}";
             return Response.ok(responseJson).build();
         } catch (Exception e) {
             bl.close();
-            return Response.status(Response.Status.BAD_REQUEST)
-                   .entity("{\"error\":\"" + e.getMessage() + "\"}").build();
+            return Response.status(Response.Status.BAD_REQUEST).entity("{\"error\":\"" + e.getMessage() + "\"}").build();
         }
     }
 
@@ -500,18 +375,11 @@ public class MyResource {
             Timecard updatedTc = bl.updateTimecard(timecard_id, start_time, end_time, emp_id);
             bl.close();
             
-            String responseJson = "{" +
-                "\"success\":{" +
-                "\"timecard_id\":" + updatedTc.getId() + "," +
-                "\"start_time\":\"" + start_time + "\"," +
-                "\"end_time\":\"" + end_time + "\"," +
-                "\"emp_id\":" + updatedTc.getEmpId() +
-                "}}";
+            String responseJson = "{\"success\":{\"timecard_id\":" + updatedTc.getId() + ",\"start_time\":\"" + start_time + "\",\"end_time\":\"" + end_time + "\",\"emp_id\":" + updatedTc.getEmpId() + "}}";
             return Response.ok(responseJson).build();
         } catch (Exception e) {
             if (bl != null) bl.close();
-            return Response.status(Response.Status.BAD_REQUEST)
-                   .entity("{\"error\":\"" + e.getMessage() + "\"}").build();
+            return Response.status(Response.Status.BAD_REQUEST).entity("{\"error\":\"" + e.getMessage() + "\"}").build();
         }
     }
 
@@ -519,8 +387,7 @@ public class MyResource {
     @Path("timecard")
     @DELETE
     @Produces(MediaType.APPLICATION_JSON)
-    public Response deleteTimecard(@QueryParam("company") String company,
-                                  @QueryParam("timecard_id") int timecard_id) {
+    public Response deleteTimecard(@QueryParam("company") String company, @QueryParam("timecard_id") int timecard_id) {
         BusinessLayer bl = new BusinessLayer(company);
         try {
             int rowsDeleted = bl.deleteTimecard(timecard_id);
@@ -529,25 +396,11 @@ public class MyResource {
             if (rowsDeleted > 0) {
                 return Response.ok("{\"success\":\"Timecard " + timecard_id + " deleted.\"}").build();
             } else {
-                return Response.status(Response.Status.NOT_FOUND)
-                       .entity("{\"error\":\"Timecard not found\"}").build();
+                return Response.status(Response.Status.NOT_FOUND).entity("{\"error\":\"Timecard not found\"}").build();
             }
         } catch (Exception e) {
             bl.close();
-            return Response.status(Response.Status.BAD_REQUEST)
-                   .entity("{\"error\":\"" + e.getMessage() + "\"}").build();
+            return Response.status(Response.Status.BAD_REQUEST).entity("{\"error\":\"" + e.getMessage() + "\"}").build();
         }
-    }
-
-    // cleanup text
-    private String escapeJson(String input) {
-        if (input == null) return "";
-        return input.replace("\\", "\\\\")
-                   .replace("\"", "\\\"")
-                   .replace("\b", "\\b")
-                   .replace("\f", "\\f")
-                   .replace("\n", "\\n")
-                   .replace("\r", "\\r")
-                   .replace("\t", "\\t");
     }
 }
