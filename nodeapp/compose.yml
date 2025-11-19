@@ -1,0 +1,21 @@
+services:
+  mongo:
+    image: mongo:5.0
+    command: mongod
+    networks:
+      - all
+  
+  web:
+    image: benb/nodeapp:1.0
+    ports:
+      - "8080:3000"
+    depends_on:
+      - mongo
+    restart: always
+    networks:
+      - all
+    environment:
+      - MONGODB_URI="mongodb://mongo:27017/accounts"
+
+networks:
+  all:
