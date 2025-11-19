@@ -22,7 +22,7 @@ switch ($method." ".$routeParts[0]) {
     case 'GET Products':
         if (isset($routeParts[1])) {
             if ($routeParts[1] === 'Cheapest') {
-                getCheapestHandler(); Cheapest
+                getCheapestHandler(); //Cheapest
             } else if ($routeParts[1] === 'Costliest') {
                 getCostliestHandler(); //Costliest
             } else {

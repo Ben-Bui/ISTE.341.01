@@ -1,0 +1,23 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+      {
+        "type": "java",
+        "name": "P2Tester",
+        "request": "launch",
+        "mainClass": "com.server.tester.P2Tester",
+        "projectName": "projecttwo"
+      },
+      {
+        "type": "java",
+        "name": "Launch P2Tester",
+        "request": "launch",
+        "mainClass": "com.server.tester.P2Tester",
+        "args": [
+          "BuiP2",
+          "btb4516"
+        ],
+        "projectName": "p2tester"
+      }
+    ]
+}
