@@ -1,17 +1,22 @@
 {
   "name": "test",
   "version": "1.0.0",
-  "description": "",
+  "description": "Node.js UPC Product Service for Final Exam",
   "main": "index.js",
   "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "",
+  "author": "Your Name",
   "license": "ISC",
   "dependencies": {
     "express": "^5.1.0",
     "morgan": "^1.10.0",
     "mysql2": "^3.6.0",
     "upcbiz": "file:upcbiz"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1"
   }
 }
