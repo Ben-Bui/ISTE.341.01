@@ -1,6 +1,6 @@
 RewriteEngine on
 #make sure to change the following line to match your location
-RewriteBase /~btb4516/341/final/PHPexam/
+RewriteBase /~btb4516/341/final/
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule ^(.*)$ index.php?route=$1 [L,QSA,NC] 
